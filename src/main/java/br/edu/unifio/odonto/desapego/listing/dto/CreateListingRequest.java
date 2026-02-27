@@ -7,6 +7,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class CreateListingRequest {
@@ -19,6 +20,8 @@ public class CreateListingRequest {
     private String description;
 
     private BigDecimal price;
+
+    private UUID categoryId;
 
     @Size(max = 20)
     private List<String> imageUrls = new ArrayList<>();

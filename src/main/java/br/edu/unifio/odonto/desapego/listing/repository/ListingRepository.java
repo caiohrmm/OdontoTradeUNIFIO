@@ -12,16 +12,19 @@ import java.util.UUID;
 public interface ListingRepository extends JpaRepository<Listing, UUID> {
 
     @Query("""
-        SELECT l FROM Listing l
+        SELECT DISTINCT l FROM Listing l
         LEFT JOIN FETCH l.user
+        LEFT JOIN FETCH l.category
         WHERE (:status IS NULL OR l.status = :status)
         AND (:sellerId IS NULL OR l.user.id = :sellerId)
+        AND (:categoryId IS NULL OR l.category.id = :categoryId)
         AND (:search IS NULL OR :search = '' OR LOWER(l.title) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(l.description) LIKE LOWER(CONCAT('%', :search, '%')))
         ORDER BY l.createdAt DESC
         """)
     Page<Listing> findAllWithFilters(
             @Param("status") String status,
             @Param("sellerId") UUID sellerId,
+            @Param("categoryId") UUID categoryId,
             @Param("search") String search,
             Pageable pageable);
 

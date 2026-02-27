@@ -37,14 +37,15 @@ public class ListingController {
     }
 
     @GetMapping
-    @Operation(summary = "Listar anúncios", description = "Paginado. Filtros: status, sellerId, search (título/descrição). Público.")
+    @Operation(summary = "Listar anúncios", description = "Paginado. Filtros: status, sellerId, categoryId, search (título/descrição). Público.")
     public ResponseEntity<ApiResponse<PagedResponse<ListingSummaryResponse>>> list(
             @RequestParam(required = false) ListingStatus status,
             @RequestParam(required = false) UUID sellerId,
+            @RequestParam(required = false) UUID categoryId,
             @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        ListingFilter filter = ListingFilter.of(status, sellerId, search, page, size);
+        ListingFilter filter = ListingFilter.of(status, sellerId, categoryId, search, page, size);
         PagedResponse<ListingSummaryResponse> result = listingService.list(filter);
         return ResponseEntity.ok(ApiResponse.ok(result));
     }

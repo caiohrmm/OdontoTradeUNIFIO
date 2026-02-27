@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class UpdateListingRequest {
@@ -19,6 +20,8 @@ public class UpdateListingRequest {
     private BigDecimal price;
 
     private ListingStatus status;
+
+    private UUID categoryId;
 
     @Size(max = 20)
     private List<String> imageUrls;

@@ -1,5 +1,6 @@
 package br.edu.unifio.odonto.desapego.listing.domain;
 
+import br.edu.unifio.odonto.desapego.category.domain.Category;
 import br.edu.unifio.odonto.desapego.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,6 +40,10 @@ public class Listing {
     @Column(nullable = false, length = 50)
     @Builder.Default
     private String status = ListingStatus.ACTIVE.name();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;

@@ -12,6 +12,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.4.0] - 2025-02-26
+
+### Added
+
+- **Feature 4: Categorias.** Tabela `category` (Flyway V4): id, name, slug (único), description, created_at, updated_at.
+- **CRUD de categorias:** GET /api/v1/categories (listar), GET /api/v1/categories/{id}, POST, PUT, DELETE (auth). Listagem e busca por ID públicas.
+- **Listing com categoria:** coluna `listing.category_id` (opcional). Create/Update de anúncio aceitam `categoryId`; respostas incluem `categoryId` e `categoryName`.
+- **Filtro por categoria:** GET /api/v1/listings?categoryId=... para listar anúncios de uma categoria.
+- Slug gerado automaticamente a partir do nome quando não informado; validação de slug único (409 em conflito).
+- ApiExceptionHandler: "Categoria não encontrada" (404), conflito de slug (409).
+- Security: GET /api/v1/categories e GET /api/v1/categories/** permitAll.
+
+---
+
 ## [0.3.0] - 2025-02-26
 
 ### Added

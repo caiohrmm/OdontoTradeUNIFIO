@@ -85,13 +85,27 @@ CRUD de anúncios com listagem paginada e filtros. **GET** em listagens e em um 
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
-| **POST** | /api/v1/listings | Criar anúncio (auth). Body: title, description?, price?, imageUrls? |
-| **GET** | /api/v1/listings | Listar com filtros (público). Query: status?, sellerId?, search?, page=0, size=20 |
+| **POST** | /api/v1/listings | Criar anúncio (auth). Body: title, description?, price?, categoryId?, imageUrls? |
+| **GET** | /api/v1/listings | Listar com filtros (público). Query: status?, sellerId?, categoryId?, search?, page=0, size=20 |
 | **GET** | /api/v1/listings/{id} | Buscar por ID (público). |
-| **PUT** | /api/v1/listings/{id} | Atualizar (auth, dono). Campos opcionais: title, description, price, status, imageUrls |
+| **PUT** | /api/v1/listings/{id} | Atualizar (auth, dono). Campos opcionais: title, description, price, status, categoryId, imageUrls |
 | **DELETE** | /api/v1/listings/{id} | Excluir (auth, dono). |
 
-**Status do anúncio:** `ACTIVE`, `SOLD`, `RESERVED`. **Imagens:** apenas URLs (lista em `imageUrls`); upload em fase futura.
+**Status do anúncio:** `ACTIVE`, `SOLD`, `RESERVED`. **Imagens:** apenas URLs (lista em `imageUrls`); upload em fase futura. **Categoria:** opcional (`categoryId` no body; filtro `categoryId` na listagem).
+
+## Categorias
+
+CRUD de categorias para classificar anúncios. **GET** (listar e buscar por ID) é **público**; criar, editar e excluir exigem autenticação.
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| **GET** | /api/v1/categories | Listar todas (público). Ordenado por nome. |
+| **GET** | /api/v1/categories/{id} | Buscar por ID (público). |
+| **POST** | /api/v1/categories | Criar (auth). Body: name, slug?, description? |
+| **PUT** | /api/v1/categories/{id} | Atualizar (auth). |
+| **DELETE** | /api/v1/categories/{id} | Excluir (auth). Anúncios da categoria ficam sem categoria. |
+
+**Slug:** identificador único (ex.: `aparelhos`). Se não informado, é gerado a partir do nome.
 
 ## Endpoints técnicos
 

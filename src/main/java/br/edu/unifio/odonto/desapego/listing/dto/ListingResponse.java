@@ -19,6 +19,8 @@ public class ListingResponse {
     private UUID id;
     private UUID sellerId;
     private String sellerName;
+    private UUID categoryId;
+    private String categoryName;
     private String title;
     private String description;
     private BigDecimal price;

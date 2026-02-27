@@ -1,6 +1,8 @@
 package br.edu.unifio.odonto.desapego.listing.service;
 
 import br.edu.unifio.odonto.desapego.common.response.PagedResponse;
+import br.edu.unifio.odonto.desapego.category.domain.Category;
+import br.edu.unifio.odonto.desapego.category.service.CategoryService;
 import br.edu.unifio.odonto.desapego.listing.domain.Listing;
 import br.edu.unifio.odonto.desapego.listing.domain.ListingImage;
 import br.edu.unifio.odonto.desapego.listing.domain.ListingStatus;
@@ -25,12 +27,15 @@ public class ListingService {
 
     private final ListingRepository listingRepository;
     private final UserService userService;
+    private final CategoryService categoryService;
 
     @Transactional
     public ListingResponse create(UUID userId, CreateListingRequest request) {
         User user = userService.getById(userId);
+        Category category = request.getCategoryId() != null ? categoryService.getEntityById(request.getCategoryId()) : null;
         Listing listing = Listing.builder()
                 .user(user)
+                .category(category)
                 .title(request.getTitle().trim())
                 .description(request.getDescription() != null ? request.getDescription().trim() : null)
                 .price(request.getPrice())
@@ -52,6 +57,10 @@ public class ListingService {
         if (request.getDescription() != null) listing.setDescription(request.getDescription().trim());
         if (request.getPrice() != null) listing.setPrice(request.getPrice());
         if (request.getStatus() != null) listing.setStatus(request.getStatus().name());
+        if (request.getCategoryId() != null) {
+            Category cat = categoryService.getEntityById(request.getCategoryId());
+            listing.setCategory(cat);
+        }
         if (request.getImageUrls() != null) {
             listing.getImages().clear();
             setImages(listing, request.getImageUrls());
@@ -85,6 +94,7 @@ public class ListingService {
         Page<Listing> page = listingRepository.findAllWithFilters(
                 statusStr,
                 filter.getSellerId(),
+                filter.getCategoryId(),
                 filter.getSearch(),
                 pageable);
         List<ListingSummaryResponse> content = page.getContent().stream()
@@ -121,10 +131,13 @@ public class ListingService {
     }
 
     private ListingResponse toResponse(Listing listing) {
+        Category cat = listing.getCategory();
         return ListingResponse.builder()
                 .id(listing.getId())
                 .sellerId(listing.getUser().getId())
                 .sellerName(listing.getUser().getName())
+                .categoryId(cat != null ? cat.getId() : null)
+                .categoryName(cat != null ? cat.getName() : null)
                 .title(listing.getTitle())
                 .description(listing.getDescription())
                 .price(listing.getPrice())
@@ -136,10 +149,13 @@ public class ListingService {
     }
 
     private ListingSummaryResponse toSummaryResponse(Listing listing) {
+        Category cat = listing.getCategory();
         return ListingSummaryResponse.builder()
                 .id(listing.getId())
                 .sellerId(listing.getUser().getId())
                 .sellerName(listing.getUser().getName())
+                .categoryId(cat != null ? cat.getId() : null)
+                .categoryName(cat != null ? cat.getName() : null)
                 .title(listing.getTitle())
                 .price(listing.getPrice())
                 .status(listing.getStatus())

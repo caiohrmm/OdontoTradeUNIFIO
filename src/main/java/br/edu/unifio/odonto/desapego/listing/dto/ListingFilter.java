@@ -12,14 +12,16 @@ public class ListingFilter {
 
     private ListingStatus status;
     private UUID sellerId;
+    private UUID categoryId;
     private String search;
     private int page;
     private int size;
 
-    public static ListingFilter of(ListingStatus status, UUID sellerId, String search, int page, int size) {
+    public static ListingFilter of(ListingStatus status, UUID sellerId, UUID categoryId, String search, int page, int size) {
         return ListingFilter.builder()
                 .status(status)
                 .sellerId(sellerId)
+                .categoryId(categoryId)
                 .search(search != null && search.isBlank() ? null : search)
                 .page(page)
                 .size(size <= 0 ? 20 : Math.min(size, 100))
