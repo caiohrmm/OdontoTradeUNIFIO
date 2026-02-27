@@ -1,0 +1,8 @@
+# Profile 'local': usado com Docker Compose (Postgres em localhost:5432)
+# Uso: mvn spring-boot:run -Dspring-boot.run.profiles=local
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/desapego
+    username: desapego
+    password: desapego

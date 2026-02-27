@@ -1,0 +1,12 @@
+# Test profile: usa mesmo Postgres (localhost). Rode docker compose antes dos testes
+# ou use -Dspring.profiles.active=test com banco disponível.
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/desapego
+    username: desapego
+    password: desapego
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
