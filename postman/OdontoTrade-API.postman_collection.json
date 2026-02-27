@@ -1,0 +1,449 @@
+{
+	"info": {
+		"_postman_id": "odontotrade-api-collection",
+		"name": "OdontoTrade API",
+		"description": "Collection para testar a API do OdontoTrade (backend Spring Boot).\n\n**Uso:**\n1. Rode a API localmente (`mvn spring-boot:run -Dspring-boot.run.profiles=local`).\n2. Execute **Auth > Login** ou **Auth > Register** e o token será salvo automaticamente.\n3. As requisições que precisam de auth usam a variável `token`.\n\nAltere `baseUrl` nas variáveis da collection se sua API estiver em outro host/porta.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "listingId",
+			"value": ""
+		},
+		{
+			"key": "categoryId",
+			"value": ""
+		}
+	],
+	"item": [
+		{
+			"name": "Health",
+			"item": [
+				{
+					"name": "Healthcheck API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "health"]
+						},
+						"description": "Healthcheck da API. Público."
+					}
+				},
+				{
+					"name": "Actuator Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/actuator/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["actuator", "health"]
+						},
+						"description": "Health do Spring Boot Actuator."
+					}
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var json = pm.response.json();",
+									"    if (json.data && json.data.token) {",
+									"        pm.collectionVariables.set('token', json.data.token);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Usuario Teste\",\n  \"email\": \"teste@email.com\",\n  \"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "auth", "register"]
+						},
+						"description": "Registra novo usuário. Retorna token JWT; o script salva o token na variável da collection."
+					}
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var json = pm.response.json();",
+									"    if (json.data && json.data.token) {",
+									"        pm.collectionVariables.set('token', json.data.token);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"teste@email.com\",\n  \"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "auth", "login"]
+						},
+						"description": "Login. Retorna token JWT; o script salva o token na variável da collection."
+					}
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Me (usuário logado)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/me",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "users", "me"]
+						},
+						"description": "Retorna dados do usuário autenticado. Requer token."
+					}
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Listar categorias",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/categories",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "categories"]
+						},
+						"description": "Lista todas as categorias. Público."
+					}
+				},
+				{
+					"name": "Buscar categoria por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/categories/{{categoryId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "categories", "{{categoryId}}"]
+						},
+						"description": "Substitua {{categoryId}} por um UUID ou use a variável da collection."
+					}
+				},
+				{
+					"name": "Criar categoria",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Aparelhos\",\n  \"slug\": \"aparelhos\",\n  \"description\": \"Aparelhos e equipamentos odontológicos\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/categories",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "categories"]
+						},
+						"description": "Cria categoria. Requer auth. Slug opcional (gerado do nome se omitido)."
+					}
+				},
+				{
+					"name": "Atualizar categoria",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Aparelhos (atualizado)\",\n  \"description\": \"Descrição atualizada\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/categories/{{categoryId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "categories", "{{categoryId}}"]
+						},
+						"description": "Atualiza categoria. Requer auth. Use variável categoryId."
+					}
+				},
+				{
+					"name": "Excluir categoria",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/categories/{{categoryId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "categories", "{{categoryId}}"]
+						},
+						"description": "Exclui categoria. Requer auth."
+					}
+				}
+			]
+		},
+		{
+			"name": "Listings",
+			"item": [
+				{
+					"name": "Listar anúncios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/listings?page=0&size=20",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "listings"],
+							"query": [
+								{"key": "status", "value": "ACTIVE", "disabled": true},
+								{"key": "sellerId", "value": "", "disabled": true},
+								{"key": "categoryId", "value": "{{categoryId}}", "disabled": true},
+								{"key": "search", "value": "", "disabled": true},
+								{"key": "page", "value": "0"},
+								{"key": "size", "value": "20"}
+							]
+						},
+						"description": "Lista anúncios com paginação. Filtros opcionais: status, sellerId, categoryId, search. Público."
+					}
+				},
+				{
+					"name": "Buscar anúncio por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/listings/{{listingId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "listings", "{{listingId}}"]
+						},
+						"description": "Busca um anúncio pelo ID. Público. Use variável listingId."
+					}
+				},
+				{
+					"name": "Criar anúncio",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var json = pm.response.json();",
+									"    if (json.data && json.data.id) {",
+									"        pm.collectionVariables.set('listingId', json.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Kit odontológico seminovo\",\n  \"description\": \"Kit completo, pouco uso.\",\n  \"price\": 150.00,\n  \"categoryId\": \"{{categoryId}}\",\n  \"imageUrls\": []\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/listings",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "listings"]
+						},
+						"description": "Cria anúncio. Requer auth. categoryId e imageUrls opcionais. O script salva o ID do anúncio criado em listingId."
+					}
+				},
+				{
+					"name": "Atualizar anúncio",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Kit odontológico seminovo (atualizado)\",\n  \"description\": \"Preço reduzido.\",\n  \"price\": 120.00,\n  \"status\": \"ACTIVE\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/listings/{{listingId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "listings", "{{listingId}}"]
+						},
+						"description": "Atualiza anúncio. Apenas o dono pode editar. status: ACTIVE, SOLD, RESERVED."
+					}
+				},
+				{
+					"name": "Marcar como vendido",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"SOLD\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/listings/{{listingId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "listings", "{{listingId}}"]
+						},
+						"description": "Atualiza apenas o status para SOLD. Requer ser dono do anúncio."
+					}
+				},
+				{
+					"name": "Excluir anúncio",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/listings/{{listingId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "listings", "{{listingId}}"]
+						},
+						"description": "Exclui anúncio. Apenas o dono pode excluir."
+					}
+				}
+			]
+		},
+		{
+			"name": "Upload",
+			"item": [
+				{
+					"name": "Upload imagem",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": [],
+									"description": "Selecione uma imagem (JPEG, PNG, GIF ou WebP). Máx. 5 MB (ou valor de CLOUDINARY_MAX_FILE_SIZE_MB)."
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/upload",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "upload"]
+						},
+						"description": "Envia imagem para Cloudinary. Requer auth e Cloudinary configurado. Retorna a URL para usar em imageUrls dos anúncios."
+					}
+				}
+			]
+		}
+	]
+}
