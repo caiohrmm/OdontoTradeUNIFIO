@@ -12,6 +12,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.3.0] - 2025-02-26
+
+### Added
+
+- **CRUD de Listings (anúncios):** entidade `Listing` e `ListingImage` (Flyway V3), título, descrição, preço, status (ACTIVE, SOLD, RESERVED), múltiplas URLs de imagem.
+- **Listagem com filtros:** GET /api/v1/listings com paginação (page, size) e filtros opcionais: status, sellerId, search (título/descrição).
+- **Rotas públicas:** GET /api/v1/listings e GET /api/v1/listings/{id} acessíveis sem autenticação; POST, PUT e DELETE exigem JWT e apenas o dono pode editar/excluir.
+- Respostas paginadas (PagedResponse: content, totalElements, totalPages, size, number).
+- ApiExceptionHandler: "Anúncio não encontrado" (404), "Sem permissão" (403).
+
+---
+
 ## [0.2.0] - 2025-02-26
 
 ### Added

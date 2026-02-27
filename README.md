@@ -79,6 +79,20 @@ Variáveis de ambiente opcionais:
 - **JWT_SECRET** — Chave para assinar o JWT (mín. 32 caracteres). Em produção use um valor forte.
 - **JWT_EXPIRATION_MS** — Validade do token em ms (padrão: 86400000 = 24h).
 
+## Anúncios (Listings)
+
+CRUD de anúncios com listagem paginada e filtros. **GET** em listagens e em um anúncio por ID são **públicos**. Criar, editar e excluir exigem autenticação (apenas o dono pode editar/excluir).
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| **POST** | /api/v1/listings | Criar anúncio (auth). Body: title, description?, price?, imageUrls? |
+| **GET** | /api/v1/listings | Listar com filtros (público). Query: status?, sellerId?, search?, page=0, size=20 |
+| **GET** | /api/v1/listings/{id} | Buscar por ID (público). |
+| **PUT** | /api/v1/listings/{id} | Atualizar (auth, dono). Campos opcionais: title, description, price, status, imageUrls |
+| **DELETE** | /api/v1/listings/{id} | Excluir (auth, dono). |
+
+**Status do anúncio:** `ACTIVE`, `SOLD`, `RESERVED`. **Imagens:** apenas URLs (lista em `imageUrls`); upload em fase futura.
+
 ## Endpoints técnicos
 
 | Endpoint | Descrição |

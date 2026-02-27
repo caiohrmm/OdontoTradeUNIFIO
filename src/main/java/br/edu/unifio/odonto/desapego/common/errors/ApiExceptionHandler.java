@@ -23,8 +23,10 @@ public class ApiExceptionHandler {
             status = HttpStatus.CONFLICT;
         } else if (message != null && message.contains("senha inválidos")) {
             status = HttpStatus.UNAUTHORIZED;
-        } else if ("Usuário não encontrado".equals(message)) {
+        } else if ("Usuário não encontrado".equals(message) || "Anúncio não encontrado".equals(message)) {
             status = HttpStatus.NOT_FOUND;
+        } else if (message != null && message.contains("Sem permissão")) {
+            status = HttpStatus.FORBIDDEN;
         }
         var body = ApiResponse.<Map<String, String>>builder()
                 .status("error")
