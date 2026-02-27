@@ -23,7 +23,7 @@ public class ApiExceptionHandler {
             status = HttpStatus.CONFLICT;
         } else if (message != null && message.contains("senha inválidos")) {
             status = HttpStatus.UNAUTHORIZED;
-        } else         if ("Usuário não encontrado".equals(message) || "Anúncio não encontrado".equals(message) || "Categoria não encontrada".equals(message)) {
+        } else if ("Usuário não encontrado".equals(message) || "Anúncio não encontrado".equals(message) || "Categoria não encontrada".equals(message)) {
             status = HttpStatus.NOT_FOUND;
         } else if (message != null && message.contains("Sem permissão")) {
             status = HttpStatus.FORBIDDEN;
@@ -35,6 +35,38 @@ public class ApiExceptionHandler {
                 .timestamp(Instant.now())
                 .message(message)
                 .data(Map.of("error", message != null ? message : "Bad request"))
+                .build();
+        return ResponseEntity.status(status).body(body);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleIllegalState(IllegalStateException ex) {
+        String message = ex.getMessage();
+        HttpStatus status = HttpStatus.SERVICE_UNAVAILABLE;
+        if (message != null && message.contains("Upload")) {
+            status = HttpStatus.SERVICE_UNAVAILABLE; // Upload não configurado
+        }
+        var body = ApiResponse.<Map<String, String>>builder()
+                .status("error")
+                .timestamp(Instant.now())
+                .message(message)
+                .data(Map.of("error", message != null ? message : "Service unavailable"))
+                .build();
+        return ResponseEntity.status(status).body(body);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleRuntime(RuntimeException ex) {
+        String message = ex.getMessage();
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        if (message != null && message.contains("Falha no upload")) {
+            status = HttpStatus.BAD_GATEWAY;
+        }
+        var body = ApiResponse.<Map<String, String>>builder()
+                .status("error")
+                .timestamp(Instant.now())
+                .message(message != null ? message : "Erro interno")
+                .data(Map.of("error", message != null ? message : "Erro interno"))
                 .build();
         return ResponseEntity.status(status).body(body);
     }

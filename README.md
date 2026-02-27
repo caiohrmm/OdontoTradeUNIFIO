@@ -91,7 +91,23 @@ CRUD de anúncios com listagem paginada e filtros. **GET** em listagens e em um 
 | **PUT** | /api/v1/listings/{id} | Atualizar (auth, dono). Campos opcionais: title, description, price, status, categoryId, imageUrls |
 | **DELETE** | /api/v1/listings/{id} | Excluir (auth, dono). |
 
-**Status do anúncio:** `ACTIVE`, `SOLD`, `RESERVED`. **Imagens:** apenas URLs (lista em `imageUrls`); upload em fase futura. **Categoria:** opcional (`categoryId` no body; filtro `categoryId` na listagem).
+**Status do anúncio:** `ACTIVE`, `SOLD`, `RESERVED`. **Imagens:** URLs em `imageUrls`; use o endpoint de upload abaixo para obter URLs. **Categoria:** opcional (`categoryId` no body; filtro `categoryId` na listagem).
+
+## Upload de imagens (Cloudinary)
+
+Upload de imagens para o **Cloudinary**; a API retorna a URL para usar em `imageUrls` dos anúncios.
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| **POST** | /api/v1/upload | Enviar imagem (auth). Form-data: `file` (JPEG, PNG, GIF ou WebP). Retorna `{ "data": { "url": "https://..." } }`. |
+
+**Configuração:** defina as variáveis de ambiente (obtidas no [Dashboard Cloudinary](https://console.cloudinary.com)):
+
+- **CLOUDINARY_CLOUD_NAME** — Nome da cloud.
+- **CLOUDINARY_API_KEY** — API key.
+- **CLOUDINARY_API_SECRET** — API secret.
+
+Opcionais: **CLOUDINARY_FOLDER** (pasta no Cloudinary, default `desapego`), **CLOUDINARY_MAX_FILE_SIZE_MB** (tamanho máximo em MB, default 5). Sem credenciais, o endpoint retorna 503 (Upload não configurado).
 
 ## Categorias
 

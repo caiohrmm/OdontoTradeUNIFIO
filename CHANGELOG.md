@@ -12,6 +12,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.5.0] - 2025-02-26
+
+### Added
+
+- **Feature 5: Upload de imagens com Cloudinary.** Endpoint **POST /api/v1/upload** (multipart/form-data, campo `file`), requer autenticação JWT.
+- Integração com SDK Cloudinary (cloudinary-http5): upload para pasta configurável, retorno da URL segura (`secure_url`) no corpo da resposta.
+- Configuração via env: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`; opcionais: `CLOUDINARY_FOLDER` (default `desapego`), `CLOUDINARY_MAX_FILE_SIZE_MB` (default 5).
+- Validação: apenas imagens (JPEG, PNG, GIF, WebP) e tamanho máximo configurável; erros 400 para tipo/tamanho inválido, 503 quando Cloudinary não está configurado, 502 em falha de upload.
+- Bean Cloudinary condicional (`@ConditionalOnProperty`); serviço de upload disponível mesmo sem credenciais (retorna 503 ao chamar upload).
+- Limite multipart Spring: 10 MB (max-file-size e max-request-size).
+- ApiExceptionHandler: IllegalStateException (503), RuntimeException com "Falha no upload" (502).
+
+---
+
 ## [0.4.0] - 2025-02-26
 
 ### Added
