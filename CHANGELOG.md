@@ -12,6 +12,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.2.0] - 2025-02-26
+
+### Added
+
+- Entidade **User** e tabela `user` (Flyway V2): id, email, password_hash, name, role, created_at, updated_at.
+- Autenticação **JWT**: registro (POST /api/v1/auth/register), login (POST /api/v1/auth/login), usuário atual (GET /api/v1/users/me).
+- Spring Security com filtro JWT; rotas públicas: health, actuator, Swagger, auth/register e auth/login; demais rotas em /api/v1/** exigem Bearer token.
+- Configuração JWT via `jwt.secret` e `jwt.expiration-ms` (env: JWT_SECRET, JWT_EXPIRATION_MS).
+- Respostas de erro padronizadas (ApiExceptionHandler): validação (400), e-mail já cadastrado (409), credenciais inválidas (401).
+- Documentação OpenAPI com esquema Bearer JWT no Swagger UI.
+
+---
+
 ## [0.1.0] - 2025-02-26
 
 ### Added

@@ -69,6 +69,16 @@ mvn spring-boot:run
 
 Sem definir essas variáveis, o padrão é `localhost:5432` (compatível com o Docker Compose).
 
+## Autenticação (JWT)
+
+- **POST /api/v1/auth/register** — Registro (nome, e-mail, senha). Retorna token JWT.
+- **POST /api/v1/auth/login** — Login (e-mail, senha). Retorna token JWT.
+- **GET /api/v1/users/me** — Dados do usuário autenticado (requer header `Authorization: Bearer <token>`).
+
+Variáveis de ambiente opcionais:
+- **JWT_SECRET** — Chave para assinar o JWT (mín. 32 caracteres). Em produção use um valor forte.
+- **JWT_EXPIRATION_MS** — Validade do token em ms (padrão: 86400000 = 24h).
+
 ## Endpoints técnicos
 
 | Endpoint | Descrição |

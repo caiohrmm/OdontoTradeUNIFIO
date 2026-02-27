@@ -43,6 +43,11 @@ management:
     health:
       show-details: when-authorized
 
+# JWT (Auth)
+jwt:
+  secret: ${JWT_SECRET:your-256-bit-secret-change-in-production-must-be-at-least-32-chars}
+  expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
 # Springdoc / OpenAPI
 springdoc:
   api-docs:

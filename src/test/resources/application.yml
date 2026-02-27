@@ -10,3 +10,7 @@ spring:
       ddl-auto: validate
   flyway:
     enabled: true
+
+jwt:
+  secret: test-secret-with-at-least-32-characters-long-for-hs256
+  expiration-ms: 3600000
