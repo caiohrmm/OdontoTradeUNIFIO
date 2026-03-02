@@ -74,6 +74,16 @@ O frontend e a documentação de produto ficam em outros repositórios ou entreg
 - [Endpoints técnicos](#endpoints-técnicos)
 - [CORS e frontend](#cors-e-frontend)
 - [Convenções do repositório](#convenções-do-repositório)
+- [Lista de endpoints e Postman](#lista-de-endpoints-e-postman)
+
+---
+
+## Lista de endpoints e Postman
+
+- **Lista completa de endpoints:** [docs/ENDPOINTS.md](docs/ENDPOINTS.md) — todos os métodos, URLs e descrições.
+- **Testes no Postman:** na pasta `postman/` está a collection **OdontoTrade-API.postman_collection.json** com todas as requisições prontas. Importe no Postman; após **Login** ou **Register** o token é salvo automaticamente. Detalhes em [postman/README.md](postman/README.md).
+
+Ambientes do Postman (com tokens ou URLs sensíveis) não são versionados (veja `.gitignore`).
 
 ---
 
