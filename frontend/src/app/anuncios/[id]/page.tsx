@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { getListingById } from "@/services/api/listings.service";
@@ -13,7 +13,6 @@ import Image from "next/image";
 
 export default function AnuncioDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const id = params.id as string;
 
   const { data, isLoading, error } = useQuery({
@@ -64,9 +63,7 @@ export default function AnuncioDetailPage() {
                   {data.description && (
                     <p className="mt-6 whitespace-pre-wrap text-sm">{data.description}</p>
                   )}
-                  <Button className="mt-6" asChild>
-                    <a href={`mailto:${data.sellerName}`}>Entrar em contato</a>
-                  </Button>
+                  <Button className="mt-6">Contatar vendedor</Button>
                 </div>
               </div>
             </Card>
