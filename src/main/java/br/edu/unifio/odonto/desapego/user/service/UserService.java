@@ -16,12 +16,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
 
+    private static final String ALLOWED_EMAIL_DOMAIN = "@unifio.edu.br";
+    private static final String INSTITUTIONAL_EMAIL_MESSAGE =
+            "Use o e-mail institucional (@unifio.edu.br) para se registrar e acessar a plataforma.";
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
+        validateInstitutionalEmail(request.getEmail());
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("E-mail já cadastrado");
         }
@@ -37,6 +42,7 @@ public class UserService {
     }
 
     public AuthResponse login(String email, String password) {
+        validateInstitutionalEmail(email);
         User user = userRepository.findByEmail(email.trim().toLowerCase())
                 .orElseThrow(() -> new IllegalArgumentException("E-mail ou senha inválidos"));
         if (!passwordEncoder.matches(password, user.getPasswordHash())) {
@@ -49,5 +55,11 @@ public class UserService {
     public User getById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+    }
+
+    private void validateInstitutionalEmail(String email) {
+        if (email == null || !email.trim().toLowerCase().endsWith(ALLOWED_EMAIL_DOMAIN)) {
+            throw new IllegalArgumentException(INSTITUTIONAL_EMAIL_MESSAGE);
+        }
     }
 }

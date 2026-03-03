@@ -27,6 +27,8 @@ public class ApiExceptionHandler {
             status = HttpStatus.NOT_FOUND;
         } else if (message != null && message.contains("Sem permissão")) {
             status = HttpStatus.FORBIDDEN;
+        } else if (message != null && message.contains("e-mail institucional")) {
+            status = HttpStatus.FORBIDDEN;
         } else if (message != null && message.contains("slug")) {
             status = HttpStatus.CONFLICT;
         }
