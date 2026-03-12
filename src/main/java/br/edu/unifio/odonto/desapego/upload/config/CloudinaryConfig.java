@@ -22,7 +22,7 @@ public class CloudinaryConfig {
     private String apiSecret;
 
     @Bean
-    @ConditionalOnProperty(prefix = "cloudinary", name = "cloud-name")
+    @ConditionalOnProperty(prefix = "cloudinary", name = "enabled", havingValue = "true")
     public Cloudinary cloudinary() {
         if (cloudName.isBlank() || apiKey == null || apiKey.isBlank() || apiSecret == null || apiSecret.isBlank()) {
             throw new IllegalStateException("Cloudinary: defina cloudinary.cloud-name, api-key e api-secret.");

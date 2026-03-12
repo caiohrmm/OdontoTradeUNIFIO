@@ -2,9 +2,7 @@
 # ou use -Dspring.profiles.active=test com banco disponível.
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/desapego
-    username: desapego
-    password: desapego
+    url: psql 'psql 'postgresql://neondb_owner:npg_1gGaTxcdrtP4@ep-wispy-bar-adxt9h5n-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
   jpa:
     hibernate:
       ddl-auto: validate
