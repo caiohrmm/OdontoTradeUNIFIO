@@ -3,7 +3,14 @@ spring:
     name: unifio-odonto-desapego-backend
 
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/desapego?user=desapego&password=desapego}
+    # Credenciais do banco via variáveis de ambiente.
+    # Exemplos:
+    # - SPRING_DATASOURCE_URL=jdbc:postgresql://host/db
+    # - SPRING_DATASOURCE_USERNAME=user
+    # - SPRING_DATASOURCE_PASSWORD=pass
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/desapego}
+    username: ${SPRING_DATASOURCE_USERNAME:desapego}
+    password: ${SPRING_DATASOURCE_PASSWORD:desapego}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 5
@@ -68,23 +75,3 @@ springdoc:
     path: /swagger-ui.html
     operationsSorter: method
     tagsSorter: alpha
-
----
-# Profile: local (Docker Compose Postgres)
-spring:
-  config:
-    activate:
-      on-profile: local
-  datasource:
-    url: jdbc:postgresql://localhost:5432/desapego
-    username: desapego
-    password: desapego
-
----
-# Profile: default (Neon ou env vars)
-# Configure DATABASE_URL
-# Para Neon: DATABASE_URL=jdbc:postgresql://host/db?sslmode=require&channelBinding=require&user=USER&password=PASS
-spring:
-  config:
-    activate:
-      on-profile: default

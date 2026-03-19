@@ -104,6 +104,11 @@ Para rodar o backend na sua máquina você precisa de:
 
 Passo a passo para subir a API no seu computador usando PostgreSQL no Docker.
 
+### Como abrir o projeto (Spring Boot / Maven)
+1. Abra a pasta do projeto em uma IDE (IntelliJ IDEA, Eclipse, ou VS Code).
+2. Garanta que o Maven carregou o `pom.xml` (normalmente o IDE pergunta para importar).
+3. Depois você pode rodar pelo comando abaixo ou pela IDE.
+
 ### 1. Clonar o repositório (se ainda não tiver)
 
 ```bash
@@ -125,6 +130,10 @@ Isso sobe um container com PostgreSQL 16 na porta **5432**, banco **desapego**, 
 mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
+Credenciais do banco:
+- Com `profiles=local`, a aplicação usa o PostgreSQL do `docker-compose.yml` (banco `desapego`, usuário `desapego`, senha `desapego`).
+- Se você rodar sem `profiles=local`, ainda funciona com defaults, porque o `application.yml` usa `SPRING_DATASOURCE_URL/USERNAME/PASSWORD` (padrão para `localhost:5432/desapego`).
+
 ### 4. Testar
 
 - **API:** [http://localhost:8080](http://localhost:8080)
@@ -141,7 +150,7 @@ Se preferir não usar Docker e conectar a um banco na nuvem:
 
 1. Crie uma conta no [Neon](https://neon.tech) e um projeto.
 2. Copie a **connection string** (algo como `postgresql://user:password@host/dbname?sslmode=require`).
-3. Defina as variáveis de ambiente abaixo (ou use um arquivo `.env` que **não** seja commitado):
+3. Defina as variáveis de ambiente abaixo (o Spring Boot **não** lê `.env` automaticamente; você precisa exportar/setar as variáveis no seu terminal, ou repassar via Docker).
 
 | Variável | Descrição |
 |----------|-----------|
@@ -177,7 +186,7 @@ Resumo das variáveis que você pode precisar:
 
 | Variável | Obrigatória? | Descrição |
 |----------|----------------|-----------|
-| `SPRING_DATASOURCE_URL` | Não (default: localhost) | URL JDBC do PostgreSQL. |
+| `SPRING_DATASOURCE_URL` | Não (default: `jdbc:postgresql://localhost:5432/desapego`) | URL JDBC do PostgreSQL. |
 | `SPRING_DATASOURCE_USERNAME` | Não | Usuário do banco. |
 | `SPRING_DATASOURCE_PASSWORD` | Não | Senha do banco. |
 | `JWT_SECRET` | Não (há default de dev) | Chave para assinar o JWT. Em produção use um valor forte e único (mín. 32 caracteres). |
