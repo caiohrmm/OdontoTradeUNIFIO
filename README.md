@@ -63,7 +63,7 @@ O frontend e a documentação de produto ficam em outros repositórios ou entreg
 ## Índice
 
 - [Pré-requisitos](#pré-requisitos)
-- [Rodar localmente](#rodar-localmente)
+- [Rodar com Neon (sem Docker)](#rodar-com-neon-sem-docker)
 - [Configurar banco (Neon)](#configurar-banco-neon-postgresql-na-nuvem)
 - [Variáveis de ambiente](#variáveis-de-ambiente)
 - [API: visão geral](#api-visão-geral)
@@ -95,14 +95,14 @@ Para rodar o backend na sua máquina você precisa de:
 |------|----------------------|
 | **Java** | 17 |
 | **Maven** | 3.8+ |
-| **Docker + Docker Compose** | Para subir o PostgreSQL local (recomendado para desenvolvimento) |
-| **Conta Neon** | Opcional; para usar PostgreSQL na nuvem em vez do Docker |
+| **Docker + Docker Compose** | Opcional (se você quiser rodar PostgreSQL local) |
+| **Conta Neon** | Sim (para usar o PostgreSQL na nuvem) |
 
 ---
 
-## Rodar localmente
+## Rodar com Neon (sem Docker)
 
-Passo a passo para subir a API no seu computador usando PostgreSQL no Docker.
+Passo a passo para rodar o backend usando o PostgreSQL do Neon (sem Docker).
 
 ### Como abrir o projeto (Spring Boot / Maven)
 1. Abra a pasta do projeto em uma IDE (IntelliJ IDEA, Eclipse, ou VS Code).
@@ -116,23 +116,23 @@ git clone <url-do-repositorio>
 cd projetointegrador1
 ```
 
-### 2. Subir o PostgreSQL
+### 2. Definir credenciais do Neon
 
-```bash
-docker compose up -d
+No PowerShell, defina as variáveis do banco (substitua `HOST`, `DBNAME`, `USER` e `PASSWORD`):
+
+```powershell
+$env:SPRING_DATASOURCE_URL="jdbc:postgresql://HOST/DBNAME?sslmode=require"
+$env:SPRING_DATASOURCE_USERNAME="USER"
+$env:SPRING_DATASOURCE_PASSWORD="PASSWORD"
 ```
 
-Isso sobe um container com PostgreSQL 16 na porta **5432**, banco **desapego**, usuário e senha **desapego** (configurados no `docker-compose.yml`).
+Se você já tem a connection string completa do Neon, use ela na variável `SPRING_DATASOURCE_URL`.
 
 ### 3. Rodar a aplicação
 
 ```bash
-mvn spring-boot:run -Dspring-boot.run.profiles=local
+mvn spring-boot:run
 ```
-
-Credenciais do banco:
-- Com `profiles=local`, a aplicação usa o PostgreSQL do `docker-compose.yml` (banco `desapego`, usuário `desapego`, senha `desapego`).
-- Se você rodar sem `profiles=local`, ainda funciona com defaults, porque o `application.yml` usa `SPRING_DATASOURCE_URL/USERNAME/PASSWORD` (padrão para `localhost:5432/desapego`).
 
 ### 4. Testar
 
@@ -146,11 +146,11 @@ No Swagger você pode testar registro, login, listagem de anúncios, categorias 
 
 ## Configurar banco (Neon — PostgreSQL na nuvem)
 
-Se preferir não usar Docker e conectar a um banco na nuvem:
+Se você estiver usando o Neon (sem Docker), aqui está o passo a passo das variáveis:
 
 1. Crie uma conta no [Neon](https://neon.tech) e um projeto.
 2. Copie a **connection string** (algo como `postgresql://user:password@host/dbname?sslmode=require`).
-3. Defina as variáveis de ambiente abaixo (o Spring Boot **não** lê `.env` automaticamente; você precisa exportar/setar as variáveis no seu terminal, ou repassar via Docker).
+3. Defina as variáveis de ambiente abaixo (o Spring Boot **não** lê `.env` automaticamente; você precisa exportar/setar as variáveis no seu terminal).
 
 | Variável | Descrição |
 |----------|-----------|
@@ -176,7 +176,7 @@ $env:SPRING_DATASOURCE_PASSWORD="sua_senha"
 mvn spring-boot:run
 ```
 
-Se essas variáveis não forem definidas, a aplicação usa por padrão `localhost:5432`, compatível com o `docker-compose.yml`.
+Se essas variáveis não forem definidas, a aplicação vai tentar conectar em `localhost:5432` (default).
 
 ---
 
