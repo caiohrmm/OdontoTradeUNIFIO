@@ -68,6 +68,66 @@ public class Listing {
         updatedAt = Instant.now();
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public List<ListingImage> getImages() {
+        return images;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     public boolean isOwnedBy(UUID userId) {
         return user != null && user.getId().equals(userId);
     }

@@ -58,6 +58,11 @@ jwt:
   secret: ${JWT_SECRET:your-256-bit-secret-change-in-production-must-be-at-least-32-chars}
   expiration-ms: ${JWT_EXPIRATION_MS:86400000}
 
+# Upload local de imagens
+upload:
+  dir: ${UPLOAD_DIR:uploads}
+  max-file-size-mb: ${UPLOAD_MAX_FILE_SIZE_MB:5}
+
 # Cloudinary (upload de imagens). Use CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
 cloudinary:
   enabled: ${CLOUDINARY_ENABLED:false}

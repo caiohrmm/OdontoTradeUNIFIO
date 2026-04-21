@@ -2,7 +2,7 @@ package br.edu.unifio.odonto.desapego.upload.controller;
 
 import br.edu.unifio.odonto.desapego.common.response.ApiResponse;
 import br.edu.unifio.odonto.desapego.upload.dto.UploadResponse;
-import br.edu.unifio.odonto.desapego.upload.service.CloudinaryUploadService;
+import br.edu.unifio.odonto.desapego.upload.service.LocalUploadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -16,11 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/upload")
-@Tag(name = "Upload", description = "Upload de imagens para Cloudinary (retorna URL para usar em anúncios)")
+@Tag(name = "Upload", description = "Upload de imagens localmente (retorna URL para usar em anúncios)")
 @RequiredArgsConstructor
 public class UploadController {
 
-    private final CloudinaryUploadService uploadService;
+    private final LocalUploadService uploadService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @SecurityRequirement(name = "bearerAuth")
